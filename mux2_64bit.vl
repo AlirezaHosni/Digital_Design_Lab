@@ -1,0 +1,10 @@
+`default_nettype none
+`timescale 1ns/10ps
+
+module mux2to1 (w0, w1, s, f);
+input  s;
+input [63:0] w0;
+input [63:0] w1;
+output [63:0] f;
+assign f = s ? w1 : w0;
+endmodule
