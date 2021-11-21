@@ -1,0 +1,43 @@
+module mux2_64bit_tb;
+reg  s;
+reg [63:0] w0;
+reg [63:0] w1;
+wire [63:0] f;
+
+localparam period = 20;
+
+mux2to1 UUD (.s(s), .w0(w0), .w1(w1), .f(f));
+
+reg clk;
+
+always 
+begin
+    clk = 1'b0;
+    #20
+
+    clk = 1'b1;
+    #20
+end
+
+always @(posedge clk )
+    begin
+     s = 0;
+     #period
+
+     if (f != w0)
+      $display(" test failed for input s=0");
+
+       s = 1;
+     #period
+
+     if (f != w1)
+      $display(" test failed for input s=1");
+         
+     end
+
+    
+end
+    
+end
+    
+endmodule
