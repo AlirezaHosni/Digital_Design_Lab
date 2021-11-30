@@ -1,0 +1,32 @@
+`default_nettype none
+`timescale 1ns/10ps
+
+module register (clk, data_in, write_read, E, data_out); 
+
+input clk;
+input write_read;
+input E; 
+input [63:0]data_in;
+output reg [63:0]data_out;
+
+reg [63:0]  data;
+
+
+// Memory Write Block 
+always @ (posedge clk, write_read, E)
+begin
+   if ( E && write_read )
+    begin
+       data = data_in;
+   end
+end
+
+// Memory Read Block 
+always @ (posedge clk, write_read, E)
+begin
+  if (!write_read && E) begin
+    data_out = data;
+  end 
+end
+
+endmodule

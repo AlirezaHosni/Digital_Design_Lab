@@ -1,0 +1,57 @@
+`default_nettype none
+`timescale 1ns/10ps
+
+`include "register.vl"
+`include "instructionMemory.vl"
+
+module instructionMemory_tb;
+
+reg clk = 0;
+reg E;
+reg write_read;
+reg [63:0]data_in;
+wire [63:0]address = 10;
+wire reg[63:0]data_out;
+
+integer i = 0;
+
+always
+begin
+    clk = ~ clk;
+    #20;
+end
+
+
+instructionMemory ins1(clk, data_in, write_read, E, address, data_out);
+
+always @(posedge clk)
+begin
+
+    E =1;
+    write_read = 1;
+    data_in = 145;
+
+    #40;
+    
+    write_read = 0;
+
+    for ( i=0 ; i<64; i++)  
+    begin
+        if (data_in[i] != data_out[i])
+        begin
+           $display(" error error    !!!!!!!  data_in[%d] = %b  data_out[%d] = %b",i,data_in[i], data_out[i]);  
+        end
+        
+    end
+    $finish;
+end
+
+always
+begin
+    $dumpfile("instructionMemory.vcd");
+    $dumpvars(0, instructionMemory_tb);
+    #300;
+    $finish;
+end
+
+endmodule
