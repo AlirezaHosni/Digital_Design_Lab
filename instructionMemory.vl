@@ -1,0 +1,45 @@
+`default_nettype none
+`timescale 1ns/10ps
+
+module instructionMemory (clk, data_in, write_read, E, address, data_out); 
+
+input clk;
+input write_read;
+input E; 
+input [63:0]data_in;
+input wire  [63:0]address;
+output reg [63:0]data_out;
+
+reg [0:63] mem [0:2^63] ;
+
+
+// always @(E)
+// begin
+//     if (E==0) begin
+//         data = 64'bx;
+//     end
+// end
+
+
+// Memory Write Block 
+// Write Operation : When write_read = 1
+always @ (posedge clk, write_read, E, address)
+begin
+   if ( E && write_read )
+    begin
+       mem[address] = data_in;
+      //  $display("writing......  data_in = %b  data_out = %b", data_in, data_out);
+   end
+end
+
+// Memory Read Block 
+// Read Operation : When write_read = 0, E = 1, cs = 1
+always @ (posedge clk, write_read, E, address)
+begin
+  if (!write_read && E) begin
+    data_out = mem[address];
+    // $display("reading......  data_in = %b  data_out = %b address=%b", data_in, mem[address],address);
+  end 
+end
+
+endmodule
