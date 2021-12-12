@@ -3,7 +3,7 @@
 
 module ALU (Opcode, Operand1, Operand2, Result, flagC, flagZ);    
 
-input [2:0]  Opcode;
+input [3:0]  Opcode;
 
 input [63:0]  Operand1, Operand2;
 
