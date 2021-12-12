@@ -17,21 +17,21 @@ module ALU_tb;
 
    always begin
 
-  Opcode   = 4'0000;
+  Opcode   = 4'b0000;
   Operand1 = 2000;
   Operand2 = 1000;
 
   #40;
 
-  Opcode = 4'0001;
+  Opcode = 4'b0001;
 
   #40;
 
-  Opcode = 4'0010;
+  Opcode = 4'b0010;
 
   #40;
 
-  Opcode = 4'0110;
+  Opcode = 4'b0110;
 
   $finish;
 
@@ -40,7 +40,7 @@ module ALU_tb;
  always
 begin
     $dumpfile("ALU_tb.vcd");
-    $dumpvars(0, ALU_tb_tb);
+    $dumpvars(0, ALU_tb);
     #300;
     $finish;
 end  
