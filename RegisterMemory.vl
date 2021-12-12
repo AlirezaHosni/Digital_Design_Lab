@@ -20,7 +20,7 @@ reg [0:63] mem [31:0] ;
 
 
 // Memory Write Block 
-always @ (posedge clk, write_read, E, address)
+always @ (posedge clk, write_read, E, address, write_data)
 begin
    if ( E && write_read )
     begin
@@ -29,7 +29,7 @@ begin
 end
 
 // Memory Read Block 
-always @ (posedge clk, write_read, E, address)
+always @ (posedge clk, write_read, E, address, , read_register_1, read_register_2)
 begin
   if (!write_read && E) begin
     read_data_1 = mem[read_register_1];
@@ -38,3 +38,4 @@ begin
 end
 
 endmodule
+
