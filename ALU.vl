@@ -9,7 +9,7 @@ input [63:0]  Operand1, Operand2;
 
 output reg [63:0] Result = 64'b0;
 
-output reg  flagC = 1'b0,
+output reg  flagC = 1'b0;
 
 output reg flagZ = 1'b0;   
 
@@ -53,7 +53,7 @@ begin
 
  default: begin
 
-   Result = 16'b0;
+   Result = 64'b0;
 
    flagC  = 1'b0;
 
