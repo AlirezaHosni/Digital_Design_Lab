@@ -10,7 +10,7 @@ reg clk = 0;
 reg E;
 reg write_read;
 reg [63:0]data_in;
-wire [63:0]address = 10;
+wire [4:0]address = 10;
 wire reg[63:0]data_out;
 
 integer i = 0;
@@ -39,7 +39,7 @@ begin
     begin
         if (data_in[i] != data_out[i])
         begin
-           $display(" error error    !!!!!!!  data_in[%d] = %b  data_out[%d] = %b",i,data_in[i], data_out[i]);  
+           $display("test failed data_in and data_out must be equal !!!!  data_in[%d] = %b  data_out[%d] = %b",i,data_in[i], data_out[i]);  
         end
         
     end
