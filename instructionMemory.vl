@@ -10,7 +10,7 @@ input [63:0]data_in;
 input wire  [4:0]address;
 output reg [63:0]data_out;
 
-reg [0:63] mem [0:31] ;
+reg [0:63] mem [31:0] ;
 
 
 // Memory Write Block 
