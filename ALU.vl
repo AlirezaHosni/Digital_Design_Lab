@@ -45,7 +45,7 @@ begin
 
  4'b0110: begin
 
-   {flagC,Result} = Operand1 - Operand2;
+   Result = Operand1 - Operand2;
 
    flagZ  = (Result == 64'b0);
 
