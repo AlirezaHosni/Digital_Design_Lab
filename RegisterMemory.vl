@@ -1,0 +1,40 @@
+`default_nettype none
+`timescale 1ns/10ps
+
+module RegisterMemory (clk, write_data, read_register_2,  write_read, E, address, read_data_1, read_data_2); 
+
+input clk;
+input write_read;
+input E;
+
+input [4:0]read_register_1; 
+input [4:0]read_register_2;
+
+input [63:0]write_data;
+input wire  [4:0]address;
+
+output reg [63:0]read_data_1;
+output reg [63:0]read_data_2;
+
+reg [0:63] mem [31:0] ;
+
+
+// Memory Write Block 
+always @ (posedge clk, write_read, E, address)
+begin
+   if ( E && write_read )
+    begin
+       mem[address] = write_data;
+   end
+end
+
+// Memory Read Block 
+always @ (posedge clk, write_read, E, address)
+begin
+  if (!write_read && E) begin
+    read_data_1 = mem[read_register_1];
+    read_data_2 = mem[read_register_2];
+  end 
+end
+
+endmodule
