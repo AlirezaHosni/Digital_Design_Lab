@@ -1,0 +1,82 @@
+`default_nettype none
+`timescale 1ns/10ps
+
+`include "RegisterMemory.vl"
+
+module RegisterMemory_tb;
+
+reg clk = 0;
+reg E;
+reg write_read;
+
+reg [63:0]write_data;
+reg [4:0]address;
+
+reg [4:0]read_register_1; 
+reg [4:0]read_register_2;
+
+wire reg [63:0]read_data_1;
+wire reg [63:0]read_data_2;
+
+integer i = 0;
+integer j = 0;
+reg [63:0] first_value= 130;
+reg [63:0] second_value= 150;
+
+always
+begin
+    clk = ~ clk;
+    #20;
+end
+
+
+RegisterMemory RegisterMemory(clk, write_data, read_register_1, read_register_2,  write_read, E, address, read_data_1, read_data_2);
+    
+always @(posedge clk)
+begin
+
+    E =1;
+    write_read = 1;
+    write_data = first_value;
+    address = 10;
+
+    #40
+
+    write_data = second_value;
+    address = 12;
+
+    #40;
+    
+    write_read = 0;
+    read_register_1 = 10;
+    read_register_2 = 12;
+
+    for ( i=0 ; i<64; i++)  
+    begin
+        if (first_value[i]  != read_data_1[i])
+        begin
+           $display("test failed first_value and read_data_1 must be equal !!!  first_value[%d] = %b  read_data_1[%d] = %b",i,first_value[i], read_data_1[i]);  
+        end
+        
+    end
+
+    for ( j=0 ; j<64; j++)  
+    begin
+        if (second_value[j]  != read_data_2[j])
+        begin
+           $display("test failed second_value and read_data_2 must be equal !!!  first_value[%d] = %b  read_data_1[%d] = %b",j,second_value[j], read_data_2[j]);  
+        end
+        
+    end
+    $finish;
+end
+
+always
+begin
+    $dumpfile("RegisterMemory.vcd");
+    $dumpvars(0, RegisterMemory_tb);
+    #300;
+    $finish;
+end
+
+endmodule
