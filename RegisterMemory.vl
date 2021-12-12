@@ -1,7 +1,7 @@
 `default_nettype none
 `timescale 1ns/10ps
 
-module RegisterMemory (clk, write_data, read_register_2,  write_read, E, address, read_data_1, read_data_2); 
+module RegisterMemory (clk, write_data, read_register_1, read_register_2,  write_read, E, address, read_data_1, read_data_2); 
 
 input clk;
 input write_read;
