@@ -7,10 +7,10 @@ input clk;
 input write_read;
 input E; 
 input [63:0]data_in;
-input wire  [63:0]address;
+input wire  [4:0]address;
 output reg [63:0]data_out;
 
-reg [0:63] mem [0:2^63] ;
+reg [0:63] mem [0:31] ;
 
 
 // Memory Write Block 
