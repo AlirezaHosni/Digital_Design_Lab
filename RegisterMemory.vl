@@ -1,68 +1,40 @@
 `default_nettype none
 `timescale 1ns/10ps
 
-module ALU (Opcode, Operand1, Operand2, Result, flagC, flagZ);    
+module RegisterMemory (clk, write_data, read_register_1, read_register_2,  write_read, E, address, read_data_1, read_data_2); 
 
-input [3:0]  Opcode;
+input clk;
+input write_read;
+input E;
 
-input [63:0]  Operand1, Operand2;
+input [4:0]read_register_1; 
+input [4:0]read_register_2;
 
-output reg [63:0] Result = 64'b0;
+input [63:0]write_data;
+input wire  [4:0]address;
 
-output reg  flagC = 1'b0,
+output reg [63:0]read_data_1;
+output reg [63:0]read_data_2;
 
-output reg flagZ = 1'b0;   
+reg [0:63] mem [31:0] ;
 
-always @ (Opcode or Operand1 or Operand2)
 
+// Memory Write Block 
+always @ (posedge clk, write_read, E, address, write_data)
 begin
-
- case (Opcode)
-
- 4'b0000: begin
-
-   Result = Operand1 & Operand2;
-
-   flagZ  = (Result == 64'b0);
-
-  end
-
-   4'b0001:  begin
-
-    Result = Operand1 | Operand2;
-
-    flagZ  = (Result == 64'b0);
-
+   if ( E && write_read )
+    begin
+       mem[address] = write_data;
    end
-
- 4'b0010: begin
-
-   {flagC,Result} = Operand1 + Operand2;
-
-   flagZ  = (Result == 64'b0);
-
-  end
-
- 4'b0110: begin
-
-   Result = Operand1 - Operand2;
-
-   flagZ  = (Result == 64'b0);
-
-  end
-
- default: begin
-
-   Result = 64'b0;
-
-   flagC  = 1'b0;
-
-   flagZ  = 1'b0;
-
-  end
-
- endcase
-
 end
-    
+
+// Memory Read Block 
+always @ (posedge clk, write_read, E, address,read_register_1, read_register_2)
+begin
+  if (!write_read && E) begin
+    read_data_1 = mem[read_register_1];
+    read_data_2 = mem[read_register_2];
+  end 
+end
+
 endmodule
