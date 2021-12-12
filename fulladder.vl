@@ -9,10 +9,13 @@ input [63:0]In2;
 
 input Cin;
 
-output  [63:0]Sum;
+output  reg [63:0]Sum;
 
-output Cout;
+output reg Cout;
 
-assign {cout,sum}=a+b+cin;
+initial begin
+{Cout,Sum}=In1+In2+Cin;    
+end
+
 
 endmodule
