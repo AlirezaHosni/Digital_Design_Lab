@@ -13,7 +13,7 @@ reg [63:0]  data;
 
 
 // Memory Write Block 
-always @ (posedge clk, write_read, E)
+always @ (posedge clk, write_read, E, data_in)
 begin
    if ( E && write_read )
     begin
@@ -22,7 +22,7 @@ begin
 end
 
 // Memory Read Block 
-always @ (posedge clk, write_read, E)
+always @ (posedge clk, write_read, E, data_in)
 begin
   if (!write_read && E) begin
     data_out = data;
