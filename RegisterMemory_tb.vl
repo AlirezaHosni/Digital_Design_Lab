@@ -40,7 +40,7 @@ begin
     write_data = first_value;
     address = 10;
 
-    #40
+    #40;
 
     write_data = second_value;
     address = 12;
