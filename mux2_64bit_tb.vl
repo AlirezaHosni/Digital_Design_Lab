@@ -5,13 +5,15 @@
 
 module mux2_64bit_tb;
 reg  s;
-reg [63:0] w0;
-reg [63:0] w1;
-wire [63:0] f;
+reg [63:0] w0 = 10;
+reg [63:0] w1 = 20;
+wire reg [63:0] f;
 
 localparam period = 20;
+integer i = 0;
+integer j = 0;
 
-mux2to1 UUD (.s(s), .w0(w0), .w1(w1), .f(f));
+mux2to1 multiplexer (w0, w1, s, f);
 
 reg clk;
 
@@ -27,17 +29,39 @@ end
 always @(posedge clk )
     begin
      s = 0;
-     #period
+     #period;
+    
+    for ( i=0 ; i<64; i++)  
+    begin
+        if (w0[i]  != f[i])
+        begin
+           $display("test failed w0 and f must be equal !!!  w0[%d] = %b  f[%d] = %b",i,w0[i], f[i]);  
+        end
+        
+    end
+    
 
-     if (f != w0)
-      $display(" test failed for input s=0");
-
-       s = 1;
-     #period
-
-     if (f != w1)
-      $display(" test failed for input s=1");
+    s = 1;
+     #period;
          
+        for ( j=0 ; j<64; j++)  
+    begin
+        if (w1[j]  != f[j])
+        begin
+           $display("test failed w1 and f must be equal !!!  w1[%d] = %b  f[%d] = %b",j,w1[j], f[j]);  
+        end    
+    end
+
+
+    $finish;
      end
+
+     always
+begin
+    $dumpfile("mux2_64bit.vcd");
+    $dumpvars(0, mux2_64bit_tb);
+    #300;
+    $finish;
+end
 
 endmodule
