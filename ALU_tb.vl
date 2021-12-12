@@ -1,0 +1,48 @@
+`default_nettype none
+`timescale 1ns/10ps
+
+`include "ALU.vl"
+
+module ALU_tb;
+
+ reg [3:0] Opcode;
+ reg [63:0] Operand1;
+ reg [63:0] Operand2;
+ wire reg [63:0] Result;
+ wire reg flagC;
+ wire reg flagZ;
+
+
+  ALU ALU (Opcode, Operand1, Operand2, Result, flagC, flagZ );
+
+   always begin
+
+  Opcode   = 4'0000;
+  Operand1 = 2000;
+  Operand2 = 1000;
+
+  #40;
+
+  Opcode = 4'0001;
+
+  #40;
+
+  Opcode = 4'0010;
+
+  #40;
+
+  Opcode = 4'0110;
+
+  $finish;
+
+ end   
+
+ always
+begin
+    $dumpfile("ALU_tb.vcd");
+    $dumpvars(0, ALU_tb_tb);
+    #300;
+    $finish;
+end  
+    
+endmodule
