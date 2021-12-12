@@ -1,0 +1,32 @@
+`default_nettype none
+`timescale 1ns/10ps
+
+`include "fulladder.vl"
+
+module fullAdder_tb;
+
+ reg [63:0]In1;
+ reg [63:0]In2;
+ reg Cin;
+wire  reg [63:0]Sum;
+ wire reg Cout;
+
+
+ fulladder fulladder (In1,In2, Cin, Sum, Cout);
+
+ initial begin
+
+
+  In1 = 1'b0;
+  In2 = 1'b0;
+  Cin = 1'b0;
+
+  #100;
+
+  In1 = 100;
+  In2 = 200;
+  Cin = 1'b0;
+
+ end      
+
+endmodule
