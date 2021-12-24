@@ -1,59 +1,59 @@
 `default_nettype none
 `timescale 1ns/10ps
 
-module ALU (Opcode, Operand1, Operand2, Result, flagC, flagZ);    
+module ALU (alu_control_input, read_data_1, alu_in_2, alu_result, flagC, flagZ);    
 
-input [3:0]  Opcode;
+input [3:0]  alu_control_input;
 
-input [63:0]  Operand1, Operand2;
+input [63:0]  read_data_1, alu_in_2;
 
-output reg [63:0] Result = 64'b0;
+output reg [63:0] alu_result = 64'b0;
 
 output reg  flagC = 1'b0;
 
 output reg flagZ = 1'b0;   
 
-always @ (Opcode or Operand1 or Operand2)
+always @ (alu_control_input or read_data_1 or alu_in_2)
 
 begin
 
- case (Opcode)
+ case (alu_control_input)
 
  4'b0000: begin
 
-   Result = Operand1 & Operand2;
+   alu_result = read_data_1 & alu_in_2;
 
-   flagZ  = (Result == 64'b0);
+   flagZ  = (alu_result == 64'b0);
 
   end
 
    4'b0001:  begin
 
-    Result = Operand1 | Operand2;
+    alu_result = read_data_1 | alu_in_2;
 
-    flagZ  = (Result == 64'b0);
+    flagZ  = (alu_result == 64'b0);
 
    end
 
  4'b0010: begin
 
-   {flagC,Result} = Operand1 + Operand2;
+   {flagC,alu_result} = read_data_1 + alu_in_2;
 
-   flagZ  = (Result == 64'b0);
+   flagZ  = (alu_result == 64'b0);
 
   end
 
  4'b0110: begin
 
-   Result = Operand1 - Operand2;
+   alu_result = read_data_1 - alu_in_2;
 
-   flagZ  = (Result == 64'b0);
+   flagZ  = (alu_result == 64'b0);
 
   end
 
  default: begin
 
-   Result = 64'b0;
+   alu_result = 64'b0;
 
    flagC  = 1'b0;
 

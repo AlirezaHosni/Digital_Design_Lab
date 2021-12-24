@@ -1,32 +1,32 @@
 `default_nettype none
 `timescale 1ns/10ps
 
-module instructionMemory (clk, data_in, write_read, E, address, data_out); 
+module instructionMemory (clk, ins_in, write_read_im, E, ins_address, ins_out); 
 
 input clk;
-input write_read;
+input write_read_im;
 input E; 
-input [63:0]data_in;
-input wire  [4:0]address;
-output reg [63:0]data_out;
+input [63:0]ins_in;
+input wire  [4:0]ins_address;
+output reg [63:0]ins_out;
 
 reg [0:63] mem [31:0] ;
 
 
 // Memory Write Block 
-always @ (posedge clk, write_read, E, address, data_in)
+always @ (posedge clk, write_read_im, E, ins_address, ins_in)
 begin
-   if ( E && write_read )
+   if ( E && write_read_im )
     begin
-       mem[address] = data_in;
+       mem[ins_address] = ins_in;
    end
 end
 
 // Memory Read Block 
-always @ (posedge clk, write_read, E, address, data_in)
+always @ (posedge clk, write_read_im, E, ins_address, ins_in)
 begin
-  if (!write_read && E) begin
-    data_out = mem[address];
+  if (!write_read_im && E) begin
+    ins_out = mem[ins_address];
   end 
 end
 
