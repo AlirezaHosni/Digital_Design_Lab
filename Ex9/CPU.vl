@@ -15,11 +15,11 @@ module CPU;
     reg clk;
     reg E;
 
-    reg line;
-    reg ins_address;
+    reg [63:0]line;
+    reg [63:0]ins_address;
     reg write_read_pc;
 
-    reg ins_address_next;
+    reg [63:0]ins_address_next;
     reg Cout;
 
     reg [47:0]ins_in;
