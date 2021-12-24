@@ -76,7 +76,7 @@ module CPU;
     control control (ins_out, branch, mem_read, mem_write, mem_to_reg, alu_op, alu_src, register_write);
 
 
-    RegisterMemory RegisterMemory(clk, write_data, ins_out[15+:19], ins_out[20+:24],  register_write, E, ins_out[7+:11], read_data_1, read_data_2);
+    RegisterMemory RegisterMemory(clk, write_data, ins_out[15+:5], ins_out[20+:5],  register_write, E, ins_out[7+:5], read_data_1, read_data_2);
 
 
     ImmGen ImmGen (ins_out, imm_gen_out);
@@ -89,7 +89,7 @@ module CPU;
         .f(alu_in_2));
     
 
-    AluControl AluControl (alu_op, ins_out[30], ins_out[12+:14], alu_control_input);
+    AluControl AluControl (alu_op, ins_out[30], ins_out[12+:3], alu_control_input);
 
 
     ALU ALU (alu_control_input, read_data_1, alu_in_2, alu_result, flagC, flagZ );
