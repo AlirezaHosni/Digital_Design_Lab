@@ -1,0 +1,70 @@
+`default_nettype none
+`timescale 1ns/10ps
+
+`include "register.vl"
+`include "instructionMemory.vl"
+`include "fulladder.vl"
+`include "multiplexer.vl"
+`include "RegisterMemory.vl"
+`include "ALU.vl"
+`include "DataMemory.vl"
+`include "control.vl"
+
+module CPU;
+    
+    reg clk;
+    reg line;
+    reg ins_in;
+    reg E;
+    reg write_read_pc , write_read_im, write_read_rm, write_read_dm;
+    reg first_adder_out;
+    reg line_out;
+    reg ins_out;
+
+
+    always
+    begin
+        clk = ~ clk;
+        #20;
+    end
+
+    register PC(clk, line, write_read_pc, E, ins_address_out);
+
+
+    fulladder first_adder (ins_address_out, 4'b0100, 0, ins_address_next, Cout);
+
+
+    instructionMemory instruction_memory(clk, ins_in, write_read_im, E, ins_address_out, ins_out);
+
+
+    control control (ins_out, branch, mem_read, mem_write, mem_to_reg, alu_op, alu_src, register_write);
+
+
+    RegisterMemory RegisterMemory(clk, write_data, ins_out[15+:19], ins_out[20+:24],  register_write, E, ins_out[7+:11], read_data_1, read_data_2);
+
+
+    multiplexer alu_multiplexer (read_data_2, w1, alu_src, alu_in_2);
+    
+
+    AluControl AluControl (alu_op, ins_out[30], ins_out[12+:14], alu_control_input);
+
+
+    ALU ALU (alu_control_input, read_data_1, alu_in_2, alu_result, flagC, flagZ );
+
+
+    ImmGen ImmGen (ins_out, imm_gen_out);
+
+
+    fulladder second_adder(ins_address_out, imm_gen_out, 0, branch_address_out, Cout);
+
+
+    reg flagZ_and_branch = branch & flagZ;
+    multiplexer pc_multiplexer (ins_address_next, branch_address_out, flagZ_and_branch, line);
+
+
+    DataMemory DataMemory(clk, read_data_2, mem_read, mem_write, E, alu_result, data_memory_out);
+
+
+    multiplexer register_file_multiplexer(alu_result, data_memory_out, mem_to_reg, write_data);
+
+endmodule

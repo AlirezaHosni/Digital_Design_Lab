@@ -1,0 +1,68 @@
+`default_nettype none
+`timescale 1ns/10ps
+
+module ALU (Opcode, Operand1, Operand2, Result, flagC, flagZ);    
+
+input [3:0]  Opcode;
+
+input [63:0]  Operand1, Operand2;
+
+output reg [63:0] Result = 64'b0;
+
+output reg  flagC = 1'b0;
+
+output reg flagZ = 1'b0;   
+
+always @ (Opcode or Operand1 or Operand2)
+
+begin
+
+ case (Opcode)
+
+ 4'b0000: begin
+
+   Result = Operand1 & Operand2;
+
+   flagZ  = (Result == 64'b0);
+
+  end
+
+   4'b0001:  begin
+
+    Result = Operand1 | Operand2;
+
+    flagZ  = (Result == 64'b0);
+
+   end
+
+ 4'b0010: begin
+
+   {flagC,Result} = Operand1 + Operand2;
+
+   flagZ  = (Result == 64'b0);
+
+  end
+
+ 4'b0110: begin
+
+   Result = Operand1 - Operand2;
+
+   flagZ  = (Result == 64'b0);
+
+  end
+
+ default: begin
+
+   Result = 64'b0;
+
+   flagC  = 1'b0;
+
+   flagZ  = 1'b0;
+
+  end
+
+ endcase
+
+end
+    
+endmodule
