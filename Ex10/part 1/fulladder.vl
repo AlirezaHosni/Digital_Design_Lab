@@ -1,0 +1,21 @@
+`default_nettype none
+`timescale 1ns/10ps
+
+module fulladder ( In1, In2, Cin, Sum, Cout);
+
+input  [63:0]In1;
+
+input [63:0]In2;
+
+input Cin;
+
+output  reg [63:0]Sum;
+
+output reg Cout;
+
+initial begin
+{Cout,Sum}=In1+In2+Cin;    
+end
+
+
+endmodule
