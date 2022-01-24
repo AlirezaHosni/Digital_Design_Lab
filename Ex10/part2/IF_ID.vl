@@ -3,28 +3,28 @@
 
 module IF_ID (clk, IF_ID_in, E, IF_ID_out); 
 
-IF_ID_input clk;
-// IF_ID_input write_read_pc;
-IF_ID_input E; 
-IF_ID_input [95:0]IF_ID_in;
-IF_ID_output reg [95:0]IF_ID_out;
+input clk;
+// input write_read_pc;
+input E; 
+input [95:0]IF_ID_in;
+output reg [95:0]IF_ID_out;
 
 reg [95:0]  data;
 
 
 // Memory Write Block 
 always @ (posedge clk)
-begIF_ID_in
+begin
    if ( E )
-    begIF_ID_in
+    begin
        data = IF_ID_in;
    end
 end
 
 // Memory Read Block 
 always
-begIF_ID_in
-  if (E) begIF_ID_in
+begin
+  if (E) begin
     IF_ID_out = data;
   end 
 end
