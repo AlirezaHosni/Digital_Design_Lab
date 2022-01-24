@@ -5,6 +5,7 @@
 `include "IF_ID.vl"
 `include "ID_EX.vl"
 `include "EX_MEM.vl"
+`include "MEM_WB.vl"
 `include "instructionMemory.vl"
 `include "fulladder.vl"
 `include "multiplexer.vl"
@@ -21,7 +22,8 @@ module CPU;
     reg [63:0]line;
     reg [95:0]IF_ID_out;
     reg [272:0]ID_EX_out;
-    reg [203:0]ID_EX_out;
+    reg [203:0]EX_MEM_out;
+    reg [135:0]MEM_WB_out;
     reg [63:0]ins_address;
     reg write_read_pc;
 
@@ -150,6 +152,16 @@ module CPU;
     .data_memory_out(data_memory_out));
 
 
-    multiplexer register_file_multiplexer(alu_result, data_memory_out, mem_to_reg, write_data);
+    MEM_WB MEM_WB(clk,
+    {EX_MEM_out[203-:5], EX_MEM_out[70+:64], data_memory_out, EX_MEM[7], EX_MEM[3]},
+    E,
+    MEM_WB_out);
+
+
+    multiplexer register_file_multiplexer(
+        .w0(MEM_WB_out[66+:64]),
+        .w1(MEM_WB_out[2+:64]),
+        .s(0),
+        .f(write_data));
 
 endmodule

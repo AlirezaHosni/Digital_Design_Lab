@@ -1,0 +1,32 @@
+`default_nettype none
+`timescale 1ns/10ps
+
+module MEM_WB (clk, MEM_WB_in, E, MEM_WB_out); 
+
+input clk;
+// input write_read_pc;
+input E; 
+input [135:0]MEM_WB_in;
+output reg [135:0]MEM_WB_out;
+
+reg [135:0]  data;
+
+
+// Memory Write Block 
+always @ (posedge clk)
+begin
+   if ( E )
+    begin
+       data = MEM_WB_in;
+   end
+end
+
+// Memory Read Block 
+always
+begin
+  if (E) begin
+    MEM_WB_out = data;
+  end 
+end
+
+endmodule
