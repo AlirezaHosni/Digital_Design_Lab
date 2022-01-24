@@ -4,6 +4,7 @@
 `include "PC.vl"
 `include "IF_ID.vl"
 `include "ID_EX.vl"
+`include "EX_MEM.vl"
 `include "instructionMemory.vl"
 `include "fulladder.vl"
 `include "multiplexer.vl"
@@ -20,6 +21,7 @@ module CPU;
     reg [63:0]line;
     reg [95:0]IF_ID_out;
     reg [272:0]ID_EX_out;
+    reg [203:0]ID_EX_out;
     reg [63:0]ins_address;
     reg write_read_pc;
 
@@ -30,13 +32,13 @@ module CPU;
     reg write_read_im;
     reg [31:0]ins_out;
 
-    // reg branch,
-    // mem_read,
-    // mem_write,
-    // mem_to_reg,
-    // [1:0]alu_op,
-    // alu_src,
-    // register_write;
+    reg branch,
+    mem_read,
+    mem_write,
+    mem_to_reg,
+    [1:0]alu_op,
+    alu_src,
+    register_write;
 
     reg [63:0]write_data;
     reg [63:0]read_data_1,
@@ -56,12 +58,18 @@ module CPU;
 
     reg [63:0]data_memory_out;
     
+    reg PCSrc;
 
     always
     begin
         clk = ~ clk;
         #100;
     end
+
+
+    
+    multiplexer pc_multiplexer (ins_address_next, branch_address_out, PCSrc, line);
+
 
     PC PC(clk, line, write_read_pc, E, ins_address);
 
@@ -103,31 +111,43 @@ module CPU;
 
 
     multiplexer alu_multiplexer (
-        .w0(read_data_2),
-        .w1(imm_gen_out),
-        .s(alu_src),
+        .w0(ID_EX_out[136+:64]),
+        .w1(ID_EX_out[200+:64]),
+        .s(ID_EX_out[6]),
         .f(alu_in_2));
     
 
-    AluControl AluControl (alu_op, IF_ID_out[30], IF_ID_out[12+:3], alu_control_input);
+    AluControl AluControl (ID_EX_out[4+:1], ID_EX_out[267], ID_EX_out[266-:3], alu_control_input);
 
 
-    ALU ALU (alu_control_input, read_data_1, alu_in_2, alu_result, flagC, flagZ );
+    ALU ALU (alu_control_input, ID_EX_out[72+:64], alu_in_2, alu_result, flagC, flagZ );
 
 
     fulladder second_adder(
-        .In1(ins_address),
-        .In2(imm_gen_out),
+        .In1(ID_EX_out[8+:64]),
+        .In2(ID_EX_out[136+:64]),
         .Cin(0),
         .Sum.(branch_address_out),
         .Cout(Cout));
 
 
-    reg flagZ_and_branch = ID_EX_out[0] & flagZ;
-    multiplexer pc_multiplexer (ins_address_next, branch_address_out, flagZ_and_branch, line);
+    EX_MEM EX_MEM(clk,
+    {ID_EX_out[272-:5], ID_EX_out[136+:64], alu_result, flagZ, branch_address_out, EX_MEM[7], EX_MEM[0+:4]},
+    E,
+    EX_MEM_out);
 
 
-    DataMemory DataMemory(clk, read_data_2, ID_EX_out[1], mem_write, E, alu_result, data_memory_out);
+    reg flagZ_and_branch = EX_MEM_out[0] & EX_MEM_out[69];
+
+
+    DataMemory DataMemory(
+    .clk(clk),
+    .read_data_2(EX_MEM_out[134+:64]),
+    .(mem_read)EX_MEM_out[1],
+    .mem_write(EX_MEM_out[2]),
+    .E(E),
+    .alu_result(EX_MEM_out[70+:64]),
+    .data_memory_out(data_memory_out));
 
 
     multiplexer register_file_multiplexer(alu_result, data_memory_out, mem_to_reg, write_data);

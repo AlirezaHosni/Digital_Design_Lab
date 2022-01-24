@@ -1,0 +1,32 @@
+`default_nettype none
+`timescale 1ns/10ps
+
+module EX_MEM (clk, EX_MEM_in, E, EX_MEM_out); 
+
+input clk;
+// input write_read_pc;
+input E; 
+input [203:0]EX_MEM_in;
+output reg [203:0]EX_MEM_out;
+
+reg [203:0]  data;
+
+
+// Memory Write Block 
+always @ (posedge clk)
+begin
+   if ( E )
+    begin
+       data = EX_MEM_in;
+   end
+end
+
+// Memory Read Block 
+always
+begin
+  if (E) begin
+    EX_MEM_out = data;
+  end 
+end
+
+endmodule

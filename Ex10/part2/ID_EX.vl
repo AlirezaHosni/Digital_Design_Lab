@@ -6,10 +6,10 @@ module ID_EX (clk, ID_EX_in, E, ID_EX_out);
 input clk;
 // input write_read_pc;
 input E; 
-input [95:0]ID_EX_in;
-output reg [95:0]ID_EX_out;
+input [272:0]ID_EX_in;
+output reg [272:0]ID_EX_out;
 
-reg [95:0]  data;
+reg [272:0]  data;
 
 
 // Memory Write Block 
