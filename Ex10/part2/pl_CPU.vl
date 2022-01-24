@@ -70,7 +70,7 @@ module CPU;
 
 
     
-    multiplexer pc_multiplexer (ins_address_next, branch_address_out, PCSrc, line);
+    multiplexer pc_multiplexer (ins_address_next, EX_MEM_out[5:64], PCSrc, line);
 
 
     PC PC(clk, line, write_read_pc, E, ins_address);
@@ -100,7 +100,16 @@ module CPU;
     .register_write(ID_EX_out[7]));
 
 
-    RegisterMemory RegisterMemory(clk, write_data, IF_ID_out[15+:5], IF_ID_out[20+:5],  register_write, E, IF_ID_out[7+:5], read_data_1, read_data_2);
+    RegisterMemory RegisterMemory(
+        .clk(clk),
+        .write_data(write_data),
+        .read_register_1(IF_ID_out[15+:5]),
+        .read_register_2(IF_ID_out[20+:5]),
+        .write_read(MEM_WB_out[1]),
+        .E(E),
+        .address(MEM_WB_out[135-:5]),
+        .read_data_1(read_data_1),
+        .read_data_2(read_data_2));
 
 
     ImmGen ImmGen (IF_ID_out[0+:32], imm_gen_out);
@@ -134,7 +143,7 @@ module CPU;
 
 
     EX_MEM EX_MEM(clk,
-    {ID_EX_out[272-:5], ID_EX_out[136+:64], alu_result, flagZ, branch_address_out, EX_MEM[7], EX_MEM[0+:4]},
+    {ID_EX_out[272-:5], ID_EX_out[136+:64], alu_result, flagZ, branch_address_out, ID_EX_out[7], ID_EX_out[0+:4]},
     E,
     EX_MEM_out);
 
@@ -153,7 +162,7 @@ module CPU;
 
 
     MEM_WB MEM_WB(clk,
-    {EX_MEM_out[203-:5], EX_MEM_out[70+:64], data_memory_out, EX_MEM[7], EX_MEM[3]},
+    {EX_MEM_out[203-:5], EX_MEM_out[70+:64], data_memory_out, EX_MEM_out[7], EX_MEM_out[3]},
     E,
     MEM_WB_out);
 
