@@ -13,7 +13,7 @@ module ImmGen (instruction, imm_gen_out);
             // S-Type
             7'b0100011:
             begin
-                imm_gen_out = {instruction[25+:7], instruction[0+:5]};
+                imm_gen_out = {instruction[25+:7], instruction[7+:5]};
             end
             // SB-Type
             7'b1100011:
