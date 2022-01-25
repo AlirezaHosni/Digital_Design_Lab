@@ -87,7 +87,7 @@ module CPU;
     .Cout(Cout));
 
 
-    instructionMemory instruction_memory(clk, ins_in, write_read_im, E, ins_address, ins_out);
+    instructionMemory instruction_memory(E, ins_address, ins_out);
 
 
     IF_ID IF_ID(

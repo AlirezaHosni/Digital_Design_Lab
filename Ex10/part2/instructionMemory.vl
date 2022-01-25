@@ -1,7 +1,7 @@
 `default_nettype none
 `timescale 1ns/10ps
 
-module instructionMemory (ins_in, E, ins_address, ins_out); 
+module instructionMemory (E, ins_address, ins_out); 
 
 // input write_read_im;
 input E; 
